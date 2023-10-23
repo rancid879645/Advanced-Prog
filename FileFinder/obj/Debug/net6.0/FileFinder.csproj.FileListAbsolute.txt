@@ -1,0 +1,14 @@
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\bin\Debug\net6.0\FileFinder.exe
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\bin\Debug\net6.0\FileFinder.deps.json
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\bin\Debug\net6.0\FileFinder.runtimeconfig.json
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\bin\Debug\net6.0\FileFinder.dll
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\bin\Debug\net6.0\FileFinder.pdb
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\obj\Debug\net6.0\FileFinder.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\obj\Debug\net6.0\FileFinder.AssemblyInfoInputs.cache
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\obj\Debug\net6.0\FileFinder.AssemblyInfo.cs
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\obj\Debug\net6.0\FileFinder.csproj.CoreCompileInputs.cache
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\obj\Debug\net6.0\FileFinder.dll
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\obj\Debug\net6.0\refint\FileFinder.dll
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\obj\Debug\net6.0\FileFinder.pdb
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\obj\Debug\net6.0\FileFinder.genruntimeconfig.cache
+C:\Users\Jonathan_Velosa\source\repos\FileFinder\FileFinder\obj\Debug\net6.0\ref\FileFinder.dll
