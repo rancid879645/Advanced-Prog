@@ -13,10 +13,17 @@ if (rootPath is not (null or ""))
 
     fileVisitor.SearchStarted += (sender, e) => Console.WriteLine("The search Begins (⌐■_■)");
     fileVisitor.SearchFinished += (sender, e) => Console.WriteLine("The search finished └(^o^ )Ｘ( ^o^)┘");
+    fileVisitor.FileFound += (sender, e) =>
+    {
+        if (e.Name.Contains("stop.txt"))
+            e.IsAbortSearch=true;
+    };
     
     Console.WriteLine("Result:");
     Console.WriteLine("-------------------------------------");
-    fileVisitor.PrintTree(fileVisitor.FindFile());
+    fileVisitor.OnSearchStarted();
+    fileVisitor.PrintTree(fileVisitor.Traverse());
+    fileVisitor.OnSearchFinished();
     Console.WriteLine("-------------------------------------");
 
 }

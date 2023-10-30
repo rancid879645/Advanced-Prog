@@ -2,44 +2,47 @@
 {
     public class FileSystemVisitor
     {
-        private readonly Func<string, bool> filter;
+        private readonly Func<string, bool> _filter;
         private readonly string _rootPath;
-        public delegate void SearchStartedEventHandler(object sender, EventArgs e);
-        public delegate void SearchFinishedEventHandler(object sender, EventArgs e);
+        private bool _stopSearch= false;
 
         public FileSystemVisitor(string rootPath, Func<string,bool> filter)
         {
             this._rootPath = rootPath;
-            this.filter = filter;
+            this._filter = filter;
         }
 
-        public event SearchStartedEventHandler SearchStarted;
-        public event SearchFinishedEventHandler SearchFinished;
+        public event EventHandler SearchStarted;
+        public event EventHandler SearchFinished;
+        public event EventHandler<IsFoundArgs> FileFound;
 
-        public IEnumerable<string> FindFile()
+        public IEnumerable<string> Traverse()
         {
-            OnSearchStarted();
-            var result =FindFile(_rootPath);
-            OnSearchFinished();
+            var result = Traverse(_rootPath);
             return result;
         }
 
-        public IEnumerable<string> FindFile(string folder)
+        public IEnumerable<string> Traverse(string folder)
         {
             foreach (var subFolder in Directory.GetDirectories(folder))
             {
-                if (filter == null || filter(subFolder))
+                if (_filter == null || _filter(subFolder))
                     yield return subFolder;
 
-                foreach (var item in FindFile(subFolder))
+                foreach (var item in Traverse(subFolder))
                     yield return item;
             }
 
             foreach (var file in Directory.GetFiles(folder))
             {
-                if (filter== null || filter(file))
-                    yield return file;
-                
+                if (_stopSearch)
+                    break;
+
+                if (_filter != null && !_filter(file)) continue;
+                OnFileFound(file);
+                yield return file;
+
+
             }
         }
 
@@ -51,19 +54,23 @@
             }
         }
 
-        public List<string> GetFullTree()
-        {
-            return Directory.GetFileSystemEntries(_rootPath, "*", SearchOption.AllDirectories).ToList();
-        }
-
-        protected virtual void OnSearchStarted()
+        public void OnSearchStarted()
         {
             SearchStarted?.Invoke(this,EventArgs.Empty);
         }
 
-        protected virtual void OnSearchFinished()
+        public void OnSearchFinished()
         {
             SearchFinished?.Invoke(this,EventArgs.Empty);
+        }
+
+        public void OnFileFound(string fileName)
+        {
+            var eventArgs = new IsFoundArgs();
+            eventArgs.Name = fileName;
+            FileFound?.Invoke(this, eventArgs);
+            if (eventArgs.IsAbortSearch)
+                _stopSearch = true;
         }
 
 
