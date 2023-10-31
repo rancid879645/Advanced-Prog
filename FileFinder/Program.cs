@@ -18,12 +18,13 @@ if (rootPath is not (null or ""))
         if (e.Name.Contains("stop.txt"))
             e.IsAbortSearch=true;
     };
-    
+    fileVisitor.DirectoryFound += (sender, e) => Console.WriteLine("Directory Found");
+    fileVisitor.FilteredFileFound += (sender, e) => Console.WriteLine("Filtered File Found");
+    fileVisitor.FilteredDirectoryFound += (sender, e) => Console.WriteLine("Filtered Directory Found");
+
     Console.WriteLine("Result:");
     Console.WriteLine("-------------------------------------");
-    fileVisitor.OnSearchStarted();
     fileVisitor.PrintTree(fileVisitor.Traverse());
-    fileVisitor.OnSearchFinished();
     Console.WriteLine("-------------------------------------");
 
 }

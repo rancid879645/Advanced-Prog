@@ -14,7 +14,10 @@
 
         public event EventHandler SearchStarted;
         public event EventHandler SearchFinished;
-        public event EventHandler<IsFoundArgs> FileFound;
+        public event EventHandler<IsFoundEventArgs> FileFound;
+        public event EventHandler DirectoryFound;
+        public event EventHandler FilteredFileFound;
+        public event EventHandler FilteredDirectoryFound;
 
         public IEnumerable<string> Traverse()
         {
@@ -24,10 +27,15 @@
 
         public IEnumerable<string> Traverse(string folder)
         {
+            OnSearchStarted();
             foreach (var subFolder in Directory.GetDirectories(folder))
             {
+                OnDirectoryFound();
                 if (_filter == null || _filter(subFolder))
+                {
+                    OnFilteredDirectoryFound();
                     yield return subFolder;
+                }
 
                 foreach (var item in Traverse(subFolder))
                     yield return item;
@@ -35,15 +43,16 @@
 
             foreach (var file in Directory.GetFiles(folder))
             {
+                OnFileFound(file);
                 if (_stopSearch)
                     break;
 
                 if (_filter != null && !_filter(file)) continue;
-                OnFileFound(file);
+                OnFilteredFileFound();
                 yield return file;
-
-
+                
             }
+            OnSearchFinished();
         }
 
         public void PrintTree(IEnumerable<string> directories)
@@ -54,25 +63,41 @@
             }
         }
 
-        public void OnSearchStarted()
+        private void OnSearchStarted()
         {
             SearchStarted?.Invoke(this,EventArgs.Empty);
         }
 
-        public void OnSearchFinished()
+        private void OnSearchFinished()
         {
             SearchFinished?.Invoke(this,EventArgs.Empty);
         }
 
-        public void OnFileFound(string fileName)
+        private void OnFileFound(string fileName)
         {
-            var eventArgs = new IsFoundArgs();
-            eventArgs.Name = fileName;
+            var eventArgs = new IsFoundEventArgs
+            {
+                Name = fileName
+            };
             FileFound?.Invoke(this, eventArgs);
             if (eventArgs.IsAbortSearch)
                 _stopSearch = true;
         }
 
+        private void OnDirectoryFound()
+        {
+            DirectoryFound?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnFilteredFileFound()
+        {
+            FilteredFileFound?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnFilteredDirectoryFound()
+        {
+            FilteredDirectoryFound?.Invoke(this, EventArgs.Empty);
+        }
 
 
     }
