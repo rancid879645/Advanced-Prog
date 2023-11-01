@@ -15,7 +15,7 @@
         public event EventHandler SearchStarted;
         public event EventHandler SearchFinished;
         public event EventHandler<IsFoundEventArgs> FileFound;
-        public event EventHandler DirectoryFound;
+        public event EventHandler<IsFoundEventArgs> DirectoryFound;
         public event EventHandler FilteredFileFound;
         public event EventHandler FilteredDirectoryFound;
 
@@ -30,7 +30,10 @@
             OnSearchStarted();
             foreach (var subFolder in Directory.GetDirectories(folder))
             {
-                OnDirectoryFound();
+                OnDirectoryFound(subFolder);
+                if (_stopSearch)
+                    break;
+                
                 if (_filter == null || _filter(subFolder))
                 {
                     OnFilteredDirectoryFound();
@@ -41,6 +44,7 @@
                     yield return item;
             }
 
+            _stopSearch = false;
             foreach (var file in Directory.GetFiles(folder))
             {
                 OnFileFound(file);
@@ -84,9 +88,15 @@
                 _stopSearch = true;
         }
 
-        private void OnDirectoryFound()
+        private void OnDirectoryFound(string directoryName)
         {
-            DirectoryFound?.Invoke(this, EventArgs.Empty);
+            var eventArgs = new IsFoundEventArgs
+            {
+                Name = directoryName
+            };
+            DirectoryFound?.Invoke(this, eventArgs);
+            if (eventArgs.IsAbortSearch)
+                _stopSearch = true;
         }
 
         private void OnFilteredFileFound()

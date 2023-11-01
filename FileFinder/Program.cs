@@ -18,7 +18,11 @@ if (rootPath is not (null or ""))
         if (e.Name.Contains("stop.txt"))
             e.IsAbortSearch=true;
     };
-    fileVisitor.DirectoryFound += (sender, e) => Console.WriteLine("Directory Found");
+    fileVisitor.DirectoryFound += (sender, e) => 
+    {
+        if (e.Name.Contains("Level 3"))
+            e.IsAbortSearch = true;
+    }; 
     fileVisitor.FilteredFileFound += (sender, e) => Console.WriteLine("Filtered File Found");
     fileVisitor.FilteredDirectoryFound += (sender, e) => Console.WriteLine("Filtered Directory Found");
 
