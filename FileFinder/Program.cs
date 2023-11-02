@@ -23,8 +23,21 @@ if (rootPath is not (null or ""))
         if (e.Name.Contains("Level 3"))
             e.IsAbortSearch = true;
     }; 
-    fileVisitor.FilteredFileFound += (sender, e) => Console.WriteLine("Filtered File Found");
-    fileVisitor.FilteredDirectoryFound += (sender, e) => Console.WriteLine("Filtered Directory Found");
+    fileVisitor.FilteredFileFound += (sender, e) => 
+    {
+        if (e.Name.Contains("Exclude"))
+        {
+            e.IsExcludeFromResult = true;
+        }
+    };
+
+    fileVisitor.FilteredDirectoryFound += (sender, e) =>
+    {
+        if (e.Name.Contains("Exclude"))
+        {
+            e.IsExcludeFromResult = true;
+        }
+    };
 
     Console.WriteLine("Result:");
     Console.WriteLine("-------------------------------------");
